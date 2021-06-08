@@ -24,17 +24,14 @@ data = pd.merge(data_fromfile1, data_fromfile2, on=0)
 vectors = data.to_numpy()
 vectors = numpy.round(vectors, 4)
 
-print(vectors)
+#print(vectors)
 
 N = len(vectors)
-print(N)
+#print(N)
 assert (N > K)
 
 d = len(vectors[0]) - 1
-print(d)
-
-print(vectors[0][0])
-
+#print(d)
 assert (d > 0)
 
 
