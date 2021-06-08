@@ -36,11 +36,13 @@ assert (d>0)
 Vector_array = [[1,2,3],[2,3,4]]
 
 
+# implementing the algorithm using numpy as requested
 
+np.random.seed(0)
 def kmeansPP ():
     z =1
-    D_arr = [0 for i in range(N)]
-    Cntr = [[] for i in range(K)]
+    D_arr = np.shape(N)
+    Cntr = np.shape(N,d)
     Cntr[0] = np.random.rand(Vector_array)
     while (z<K):
         for i in range(N):
@@ -54,7 +56,7 @@ def kmeansPP ():
         Probabilities = [(D_arr[i]/Probsum) for i in range(K)]
         Cntr[z] = np.random.choice(Vector_array,p=Probabilities)
         z+=1
-    return Cntr
+
 
 # this function calculates the difference between two vectors of length d
 def diff(vec1, vec2):
