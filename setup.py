@@ -20,14 +20,14 @@ from setuptools import setup, find_packages, Extension
     at docs.python.org for more information.
 """
 setup(
-    name='kmeanspp',
+    name='mykmeanssp',
     version='0.1.0',
     description="Kmeans algorithm in C-API",
     packages=find_packages(),
     ext_modules=[
         Extension(
             # the qualified name of the extension module to build
-            'kmeanspp',
+            'mykmeanssp',
             # the files to compile into our module relative to ``setup.py``
             ['kmeans.c'],
         ),
