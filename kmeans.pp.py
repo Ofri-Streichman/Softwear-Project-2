@@ -1,5 +1,6 @@
 import numpy as np
-import kmeanspp as km
+import pandas as pn
+import mykmeanssp as km
 import sys
 
 # Reading the arguments from command line:
@@ -53,9 +54,7 @@ def kmeansPP ():
         Probabilities = [(D_arr[i]/Probsum) for i in range(K)]
         Cntr[z] = np.random.choice(Vector_array,p=Probabilities)
         z+=1
-
-
-
+    return Cntr
 
 # this function calculates the difference between two vectors of length d
 def diff(vec1, vec2):
@@ -64,3 +63,8 @@ def diff(vec1, vec2):
         dif += ((vec1[i]) - (vec2[i])) ** 2
     assert isinstance(d, int)
     return dif ** (1 / 2)
+        
+
+
+Cntr = kmeansPP()
+final_cntr = km.fit(K, N , d, MAX_ITER, Vector_array, Cntr)
