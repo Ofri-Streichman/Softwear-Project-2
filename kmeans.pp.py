@@ -1,42 +1,45 @@
+import numpy
 import numpy as np
-import pandas as pn
+import pandas as pd
 import mykmeanssp as km
 import sys
 
 # Reading the arguments from command line:
-arglen= len(sys.argv)
-assert (arglen==2 or arglen==3) # making sure we have just 2 arguments (K and MAX_ITER) or just 1 (K)
-K= int(sys.argv[1])
-assert (K>0)
-if (arglen==2):
-    MAX_ITER=200
+arglen = len(sys.argv)
+assert (arglen == 4 or arglen == 5)  # making sure we have just 4 args (K,MAX_ITER, 2 input files) or 3 (no MAX_ITER)
+K = int(sys.argv[1])
+assert (K > 0)
+if arglen == 4:
+    MAX_ITER = 300
 else:
-    MAX_ITER= int(sys.argv[2])
-    assert (MAX_ITER>0)
+    MAX_ITER = int(sys.argv[2])
+    assert (MAX_ITER > 0)
 
-# reading the data from the file and putting n vectors in an array
-data = []
-while True:
-    try:
-        vec = []
-        for num in input().split(','):
-            vec.append(float(num))
-        data.append(vec)
-    except EOFError:
-        break
+file1 = sys.argv[3]
+file2 = sys.argv[4]
 
-N = len(data)
-assert (N>K)
+data_fromfile1 = pd.read_csv(file1, header=None)
+data_fromfile2 = pd.read_csv(file2, header=None)
+data = pd.merge(data_fromfile1, data_fromfile2, on=0)
+vectors = data.to_numpy()
+vectors = numpy.round(vectors, 4)
 
-d = len(data[0])
-assert (d>0)
+print(vectors)
 
-# צריך לשנות את וקטור אריי להיות הדאטא שהשגנו משני הקבצים, כלומר רשימת הוקטורים הכללית.
-#בנוסף צריך להחליט על מוסכמה לגבי N, האם נשנה את N להיות שווה ל2N כמו גודל הרשימות? או שצריך בקוד לשנות בכל מקום שרשום N לשנות ל2N...
-Vector_array = [[1,2,3],[2,3,4]]
+N = len(vectors)
+print(N)
+assert (N > K)
+
+d = len(vectors[0]) - 1
+print(d)
+
+print(vectors[0][0])
+
+assert (d > 0)
 
 
-# implementing the algorithm using numpy as requested
+Vector_array = [[1, 2, 3], [2, 3, 4]]
+
 
 np.random.seed(0)
 def kmeansPP ():
@@ -54,7 +57,7 @@ def kmeansPP ():
                     D_arr[i]=diff
         Probsum = sum(D_arr)
         Probabilities = [(D_arr[i]/Probsum) for i in range(K)]
-        Cntr[z] = np.random.choice(Vector_array,p=Probabilities)
+        Cntr[z] = np.random.choice(Vector_array, p=Probabilities)
         z+=1
 
 
@@ -65,8 +68,7 @@ def diff(vec1, vec2):
         dif += ((vec1[i]) - (vec2[i])) ** 2
     assert isinstance(d, int)
     return dif ** (1 / 2)
-        
 
 
 Cntr = kmeansPP()
-final_cntr = km.fit(K, N , d, MAX_ITER, Vector_array, Cntr)
+final_cntr = km.fit(K, N, d, MAX_ITER, Vector_array, Cntr)
