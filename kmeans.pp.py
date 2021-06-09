@@ -1,4 +1,4 @@
-import numpy
+import copy
 import numpy as np
 import pandas as pd
 import mykmeanssp as km
@@ -22,7 +22,7 @@ data_fromfile1 = pd.read_csv(file1, header=None)
 data_fromfile2 = pd.read_csv(file2, header=None)
 data = pd.merge(data_fromfile1, data_fromfile2, on=0)
 vectors = data.to_numpy()
-vectors = numpy.round(vectors, 4)
+vectors = np.round(vectors, 4)
 
 #print(vectors)
 
@@ -35,37 +35,42 @@ d = len(vectors[0]) - 1
 assert (d > 0)
 
 
-Vector_array = [[1, 2, 3], [2, 3, 4]]
-
-
 np.random.seed(0)
 def kmeansPP ():
     z =1
-    D_arr = np.shape(N)
-    Cntr = np.shape(N,d)
-    Cntr[0] = np.random.rand(Vector_array)
+    D_arr = np.zeros(N)
+    Cntr = np.zeros(N,d+1)
+    Cntr[0] = np.random.rand(vectors)
     while (z<K):
         for i in range(N):
-            point = Vector_array[i]
+            point = vectors[i]
             D_arr[i] = float('inf')
             for j in range(z):
                 dif =  diff(point,Cntr[j])**2
                 if diff < D_arr[i]:
                     D_arr[i]=diff
         Probsum = sum(D_arr)
-        Probabilities = [(D_arr[i]/Probsum) for i in range(K)]
-        Cntr[z] = np.random.choice(Vector_array, p=Probabilities)
+        Probabilities = np.array([(D_arr[i]/Probsum) for i in range(K)])
+        cntr_i = np.random.choice(N, p=Probabilities)
+        Cntr[z] = copy.deepcopy(vectors[cntr_i])
         z+=1
-
+    return_array = [Cntr[:i] for i in range(K)]
+    print("the k centroids are: ")
+    print(Cntr[i][0] for i in range(K))
+    return return_array
 
 # this function calculates the difference between two vectors of length d
 def diff(vec1, vec2):
     dif = 0
-    for i in range(d):
+    for i in np.arange(start=1, stop=d+1):
         dif += ((vec1[i]) - (vec2[i])) ** 2
-    assert isinstance(d, int)
     return dif ** (1 / 2)
 
 
-Cntr = kmeansPP()
-final_cntr = km.fit(K, N, d, MAX_ITER, Vector_array, Cntr)
+#preparing the arguments for the C program
+centroids_for_c = kmeansPP()
+Vector_array = []
+for i in range(N):
+    Vector_array.append(vectors[i][1:]) # meaning we omit the index field for every datapoint
+final_cntr = km.fit(K, N, d, MAX_ITER, Vector_array, centroids_for_c)
+print(final_cntr)
