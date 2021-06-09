@@ -119,7 +119,6 @@ void new_centroid(double **curr_cent,  cluster* clusters, int k, int d) {
 }
 
 
-
 /*resets the clusters by filling with 0s*/
 void reset_cluster(cluster* cluster1, int k,  int d) {
     int x,y;
@@ -201,13 +200,6 @@ double** main_c(int K,int N,int d,int max_iter, double ** vectors,double ** cent
     clusters = NULL;
 
     return centroids;
-
-    for (p = 0; p < K; p++) {
-        free(centroids[p]);
-        centroids[p] = NULL;
-    }
-    free(centroids);
-    centroids = NULL;
 }
     /*
  * API functions
@@ -217,20 +209,23 @@ double** main_c(int K,int N,int d,int max_iter, double ** vectors,double ** cent
     static PyObject* fit_capi(PyObject *self, PyObject *args)
     {
         PyObject *_list, *_list2;
-        PyObject *item, *item2;
+        PyObject *item, *item2, *item3;
         int k,n,d,max;
         double ** vectors;
         double ** centroids;
         double ** new_centroids;
+        double ** more_centroids;
         int i,j;
 
         if(!PyArg_ParseTuple(args, "iiiiOO", &k,&n,&d,&max,&_list,&_list2)) {
             return NULL;
         }
+
         PyObject *result_lst = PyList_New(k);
         vectors = (double **) malloc(n* sizeof(double *));
         centroids = (double **) malloc(k * sizeof(double *));
         new_centroids = (double **) malloc(k * sizeof(double *));
+        more_centroids = (double **) malloc(k * sizeof(double *));
 
         /* Is it a list? */
         if (!PyList_Check(_list)||!PyList_Check(_list2)||!PyList_Check(result_lst)) {
@@ -274,9 +269,9 @@ double** main_c(int K,int N,int d,int max_iter, double ** vectors,double ** cent
                     Py_DECREF(num);
                     return NULL;
                 }
-                PyList_SET_ITEM(vec_lst,d,num);
+                PyList_SetItem(vec_lst,j,num);
             }
-            PyList_SET_ITEM(result_lst,i,vec_lst);
+            PyList_SetItem(result_lst,i,vec_lst);
         }
         return result_lst;
     }
@@ -318,4 +313,4 @@ accepted for this function */
         }
         return n;
     }
-    
+
