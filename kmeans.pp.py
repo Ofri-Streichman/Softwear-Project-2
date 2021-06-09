@@ -38,8 +38,8 @@ assert (d > 0)
 np.random.seed(0)
 def kmeansPP ():
     z =1
-    D_arr = np.zeros(N)
-    Cntr = np.zeros(N,d+1)
+    D_arr = np.zeros(N,dtype=float)
+    Cntr = np.zeros((N,d+1), dtype=float)
     Cntr[0] = np.random.rand(vectors)
     while (z<K):
         for i in range(N):
