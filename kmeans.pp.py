@@ -22,9 +22,10 @@ data_fromfile1 = pd.read_csv(file1, header=None)
 data_fromfile2 = pd.read_csv(file2, header=None)
 data = pd.merge(data_fromfile1, data_fromfile2, on=0)
 vectors = data.to_numpy()
+vectors = vectors[vectors[:,0].argsort()]
 vectors = np.round(vectors, 4)
 
-#print(vectors)
+
 
 N = len(vectors)
 #print(N)
@@ -56,10 +57,9 @@ def kmeansPP ():
         Cntr[z] = copy.deepcopy(vectors[cntr_i])
         z+=1
     return_array = [Cntr[:i] for i in range(K)]
-    print("the k centroids are: ")
-    arr=[]
-    for i in range(K):
-        print(Cntr[i][0])
+    for i in range(K-1):
+        print(int(Cntr[i][0]), end=",")
+    print(int(Cntr[K-1][0]))
     return return_array
 
 # this function calculates the difference between two vectors of length d
