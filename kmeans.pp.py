@@ -57,7 +57,9 @@ def kmeansPP ():
         z+=1
     return_array = [Cntr[:i] for i in range(K)]
     print("the k centroids are: ")
-    print(Cntr[i][0] for i in range(K))
+    arr=[]
+    for i in range(K):
+        print(Cntr[i][0])
     return return_array
 
 # this function calculates the difference between two vectors of length d
