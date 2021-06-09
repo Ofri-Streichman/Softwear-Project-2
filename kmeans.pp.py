@@ -48,10 +48,10 @@ def kmeansPP ():
             D_arr[i] = float('inf')
             for j in range(z):
                 dif =  diff(point,Cntr[j])**2
-                if diff < D_arr[i]:
-                    D_arr[i]=diff
+                if dif < D_arr[i]:
+                    D_arr[i]=dif
         Probsum = sum(D_arr)
-        Probabilities = np.array([(D_arr[i]/Probsum) for i in range(K)])
+        Probabilities = np.array([(D_arr[i]/Probsum) for i in range(N)])
         cntr_i = np.random.choice(N, p=Probabilities)
         Cntr[z] = copy.deepcopy(vectors[cntr_i])
         z+=1
